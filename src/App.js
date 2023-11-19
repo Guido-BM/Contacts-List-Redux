@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { signIn, signOut } from "./redux/AuthActions"; // Actualiza las importaciones
+import Home from "./Views/Home";
+import ContactList from "./Views/ContactList";
+import AddContact from "./Views/AddContact";
+import Login from "./Views/Login";
+import PrivateRoute from "./Components/PrivateRoute";
+import "./App.css";
+import { authorizedUsers } from "./redux/AuthActions";
 
-function App() {
+const App = () => {
+  const dispatch = useDispatch();
+
+  const handleLogin = () => {
+    dispatch(signIn(authorizedUsers[0])); // Puedes usar el primer usuario como ejemplo
+  };
+
+  const handleLogout = () => {
+    dispatch(signOut());
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/ContactList"
+            element={
+              <PrivateRoute>
+                <ContactList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/AddContact"
+            element={
+              <PrivateRoute>
+                <AddContact />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
