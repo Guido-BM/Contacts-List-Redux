@@ -1,28 +1,42 @@
-// Importa el array de contactos de ejemplo
-import sampleContacts from "../Components/SampleContacts";
-import { ADD_CONTACT, LOGIN_USER, SIGN_OUT } from "./AuthActions";
-
-const initialState = {
-  contacts: sampleContacts,
+import { createSlice } from "@reduxjs/toolkit";
+import sampleContacts from "../components/SampleContacts";
+export const initialState = {
   user: null,
   isAuthenticated: false,
+  contacts: sampleContacts,
 };
 
-const authReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case LOGIN_USER:
-      return { ...state, user: action.payload, isAuthenticated: true };
-    case SIGN_OUT:
-      return { ...state, user: null, isAuthenticated: false };
-    case ADD_CONTACT:
-      return {
-        ...state,
-        contacts: [...state.contacts, action.payload],
-      };
+export const authSlice = createSlice({
+  name: "auth",
+  initialState: initialState,
+  reducers: {
+    signIn: (state, action) => ({
+      ...state,
+      user: action.payload,
+      isAuthenticated: true,
+    }),
 
-    default:
-      return state;
-  }
-};
+    signOut: (state) => ({ ...state, user: null, isAuthenticated: false }),
 
-export default authReducer;
+    addContact: (state, action) => ({
+      ...state,
+      contacts: [...state.contacts, action.payload],
+    }),
+
+    deleteContact: (state, action) => ({
+      ...state,
+      contacts: state.contacts.filter(
+        (contact) => contact.id !== action.payload
+      ),
+    }),
+    editContact: (state, action) => ({
+      ...state,
+      contacts: state.contacts.map((contact) =>
+        contact.id === action.payload.id ? action.payload : contact
+      ),
+    }),
+  },
+});
+export const { signIn, signOut, addContact, deleteContact, editContact } =
+  authSlice.actions;
+export default authSlice.reducer;

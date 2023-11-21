@@ -1,17 +1,24 @@
 import React from "react";
-import { Form, Input, Button, Select, InputNumber } from "antd";
+import { Form, Input, Button, Select } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
 const AddContactForm = ({ onFinish }) => {
+  const navigate = useNavigate();
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+  };
+  const handleSubmit = (values) => {
+    const id = `${values.firstName}-${values.lastName}-${values.contactType}`;
+    onFinish({ ...values, id });
+    navigate("/contactList");
   };
 
   return (
     <Form
       name="addContact"
-      onFinish={onFinish}
+      onFinish={handleSubmit}
       onFinishFailed={onFinishFailed}
       layout="vertical"
     >
@@ -28,7 +35,6 @@ const AddContactForm = ({ onFinish }) => {
         <Select placeholder="Seleccionar">
           <Option value="trabajo">Trabajo</Option>
           <Option value="personal">Personal</Option>
-          {/* Agrega más opciones según sea necesario */}
         </Select>
       </Form.Item>
 

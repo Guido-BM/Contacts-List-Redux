@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import Login from "./Login";
 
 const Home = () => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-
+  const isAuthenticated = useSelector((state) => state.isAuthenticated);
+  console.log(isAuthenticated);
   return (
     <div>
       <h1>Home</h1>

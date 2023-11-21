@@ -2,12 +2,22 @@ import React, { useState } from "react";
 import { Button, Form, Input, Modal, message } from "antd";
 import { useNavigate, link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signIn, signOut, authorizedUsers } from "../redux/AuthActions"; // Actualiza la importación
+import { signIn, signOut } from "../redux/AuthReducers";
 
+const authorizedUsers = [
+  {
+    username: "admin",
+    password: "admin",
+  },
+  {
+    username: "user",
+    password: "user",
+  },
+];
 const LoginForm = ({ open, onCreate, onCancel }) => {
   const [form] = Form.useForm();
-  const user = useSelector((state) => state.auth.user);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.user);
+  const isAuthenticated = useSelector((state) => state.isAuthenticated);
   return (
     <Modal
       open={open}
@@ -51,8 +61,8 @@ const Login = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.user);
+  const isAuthenticated = useSelector((state) => state.isAuthenticated);
 
   const onCreate = (values) => {
     const user = authorizedUsers.find(
